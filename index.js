@@ -2,11 +2,9 @@ require('dotenv').config();
 const { Client } = require('@notionhq/client');
 const { TwitterApi } = require('twitter-api-v2');
 
-// ✅ Initialize Notion Client
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const databaseId = process.env.NOTION_DB_ID;
 
-// ✅ Initialize Twitter Client
 const twitterClient = new TwitterApi({
     appKey: process.env.TWITTER_API_KEY,
     appSecret: process.env.TWITTER_API_SECRET,
@@ -14,7 +12,7 @@ const twitterClient = new TwitterApi({
     accessSecret: process.env.TWITTER_ACCESS_SECRET,
 });
 
-// 📝 Fetch tweets from Notion (including Date & Time)
+// 📝 Fetch tweets from Notion
 async function getScheduledTweets() {
     try {
         const response = await notion.databases.query({ database_id: databaseId });
@@ -26,7 +24,7 @@ async function getScheduledTweets() {
 
             if (!tweetProp || !dateProp || !timeProp) {
                 console.warn("⚠️ Missing required fields in Notion:", page.id);
-                return null;  // Skip if missing required fields
+                return null;
             }
 
             const tweetText = tweetProp?.rich_text?.[0]?.text?.content || '';
@@ -35,14 +33,12 @@ async function getScheduledTweets() {
 
             if (!tweetText || !dateValue || !timeValue) return null;
 
-            // Assuming date and time in Notion are in IST
-            // Convert to a proper Date object
+            // Convert Notion-scheduled date & time to JavaScript Date
             const [hours, minutes] = timeValue.split(':');
             const scheduledAtIST = new Date(`${dateValue}T${hours}:${minutes}:00+05:30`);
 
             return { id: page.id, text: tweetText, scheduledAt: scheduledAtIST };
-        }).filter(tweet => tweet !== null); // Remove invalid entries
-
+        }).filter(tweet => tweet !== null);
     } catch (error) {
         console.error("❌ Error fetching tweets from Notion:", error);
         return [];
@@ -66,26 +62,29 @@ function getCurrentTimeIST() {
     return new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
 }
 
-// 🚀 Fetch tweets & post them based on IST schedule
-(async function run() {
-    console.log("📥 Fetching tweets from Notion...");
-    const tweets = await getScheduledTweets();
-    const nowIST = getCurrentTimeIST();
+// 🔄 Keep Running in a Loop Every 1 Minute
+async function startScheduler() {
+    console.log("📅 Tweet scheduler running in the background...");
+    while (true) {
+        const tweets = await getScheduledTweets();
+        const nowIST = getCurrentTimeIST();
 
-    console.log(`🕒 Current time (IST): ${nowIST.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}`);
+        console.log(`🕒 Current time (IST): ${nowIST.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}`);
 
-    for (let tweet of tweets) {
-        console.log(`🕒 Checking tweet: "${tweet.text}" | Scheduled at: ${tweet.scheduledAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}`);
-
-        if (tweet.scheduledAt <= nowIST) {
-            const success = await postTweet(tweet.text);
-            if (success) {
-                console.log(`🚀 Tweeted: ${tweet.text}`);
+        for (let tweet of tweets) {
+            if (tweet.scheduledAt <= nowIST) {
+                const success = await postTweet(tweet.text);
+                if (success) {
+                    console.log(`🚀 Tweeted: ${tweet.text}`);
+                }
             }
-        } else {
-            console.log(`⏳ Skipping future tweet: "${tweet.text}" (Scheduled for ${tweet.scheduledAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })})`);
         }
-    }
 
-    console.log("✅ All tweets processed.");
-})();
+        console.log("✅ All tweets processed.");
+        console.log("⏳ Waiting for 1 minute before checking again...");
+        await new Promise(resolve => setTimeout(resolve, 60000)); // Wait 60 seconds
+    }
+}
+
+// 🚀 Start the Scheduler
+startScheduler();
