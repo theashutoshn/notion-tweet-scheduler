@@ -66,8 +66,8 @@ function getCurrentTimeIST() {
     return new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
 }
 
-// 🚀 Function to check for scheduled tweets
-async function checkAndPostTweets() {
+// 🚀 Fetch tweets & post them based on IST schedule
+(async function run() {
     console.log("📥 Fetching tweets from Notion...");
     const tweets = await getScheduledTweets();
     const nowIST = getCurrentTimeIST();
@@ -88,17 +88,4 @@ async function checkAndPostTweets() {
     }
 
     console.log("✅ All tweets processed.");
-}
-
-// 🔁 Keep Running in a Loop Every 1 Minute
-async function startScheduler() {
-    console.log("📅 Tweet scheduler running in the background...");
-    while (true) {
-        await checkAndPostTweets();
-        console.log("⏳ Waiting for 1 minute before checking again...");
-        await new Promise(resolve => setTimeout(resolve, 60000)); // Wait 60 seconds before next check
-    }
-}
-
-// 🚀 Start the Scheduler
-startScheduler();
+})();
