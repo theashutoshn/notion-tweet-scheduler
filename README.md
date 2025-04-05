@@ -17,18 +17,18 @@ This is a tweet scheduler powered by Notion + X (Twitter) API. Schedule tweets i
 
 ## 📦 Setup Instructions
 
-1. Clone the repo:
+### 1. Clone the repo:
 ```bash
 git clone https://github.com/theashutoshn/notion-tweet-scheduler.git
 cd notion-tweet-scheduler
 ```
 
-2. Install dependencies:
+### 2. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Copy .env.example to .env and fill in your secrets:
+### 3. Copy .env.example to .env and fill in your secrets:
 ```bash
 cp .env.example .env
 ```
@@ -39,7 +39,7 @@ For Twitter, refer: https://docs.x.com/resources/fundamentals/authentication/oau
 For Notion keys, check below.
     
     
-4. Run it:
+### 4. Run it:
 ```bash
 node index.js
 ```
