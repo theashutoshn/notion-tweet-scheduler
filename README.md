@@ -45,7 +45,7 @@ node index.js
 ```
 
 
-## Notion DB Setup
+## 🧠 Notion DB Setup
 You must have notion account.
 
 How to Create a database: https://www.youtube.com/watch?v=O8qdvSxDYNY
@@ -60,12 +60,13 @@ Once done, make sure to connect the database to your integration.
 
 ![alt text](notion-tweet-schedular-integration.gif)
 
-
+```bash
 Property	|    Type	   |    Required
 ------------+--------------+------------
 Tweet	    |   Rich text  |    Yes
 Scheduled	|   Date	   |    Yes (with time)
 isPublished	|   Checkbox   |    
+```
 
 Note: Every time you select date, make sure to use "Include Time" to set the time.
 
