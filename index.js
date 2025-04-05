@@ -2,7 +2,7 @@ require('dotenv').config();
 const { Client } = require('@notionhq/client');
 const { TwitterApi } = require('twitter-api-v2');
 const { DateTime } = require('luxon');
-// ✅ Initialize Notion & Twitter clients
+// Initialize Notion & Twitter clients
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const twitterClient = new TwitterApi({
     appKey: process.env.TWITTER_API_KEY,
@@ -13,7 +13,7 @@ const twitterClient = new TwitterApi({
 
 const databaseId = process.env.NOTION_DB_ID;
 
-// ✅ Get tweets from Notion
+// Get tweets from Notion
 async function getScheduledTweets() {
     try {
         const response = await notion.databases.query({
@@ -54,24 +54,24 @@ async function getScheduledTweets() {
             };
         }).filter(Boolean);
     } catch (error) {
-        console.error("❌ Error fetching tweets:", error);
+        console.error("Error fetching tweets:", error);
         return [];
     }
 }
 
-// ✅ Post a tweet
+// Post a tweet
 async function postTweet(tweetText) {
     try {
         await twitterClient.v2.tweet(tweetText);
-        console.log("✅ Tweet posted:", tweetText);
+        console.log("Tweet posted:", tweetText);
         return true;
     } catch (error) {
-        console.error("❌ Error posting tweet:", error);
+        console.error("Error posting tweet:", error);
         return false;
     }
 }
 
-// ✅ Mark tweet as published in Notion
+// Mark tweet as published in Notion
 async function markTweetAsPublished(pageId) {
     try {
         await notion.pages.update({
@@ -82,27 +82,27 @@ async function markTweetAsPublished(pageId) {
                 },
             },
         });
-        console.log(`✅ Marked tweet as published: ${pageId}`);
+        console.log(`Marked tweet as published: ${pageId}`);
     } catch (error) {
-        console.error(`❌ Failed to mark tweet as published: ${pageId}`, error);
+        console.error(`Failed to mark tweet as published: ${pageId}`, error);
     }
 }
 
-// ✅ Get current IST time
+//Get current IST time
 function getCurrentTimeIST() {
     return DateTime.now().setZone('Asia/Kolkata').toJSDate();
 }
 
-// ✅ Tweet scheduler
+// Tweet scheduler
 async function tweetScheduler() {
-    console.log("📥 Fetching scheduled tweets...");
+    console.log("Fetching scheduled tweets...");
     const tweets = await getScheduledTweets();
     const now = getCurrentTimeIST();
 
-    console.log(`🕒 Current IST time: ${now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}`);
+    console.log(`Current IST time: ${now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}`);
 
     for (const tweet of tweets) {
-        console.log(`🔍 Checking tweet: "${tweet.text}" | Scheduled for: ${tweet.scheduledAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}`);
+        console.log(`Checking tweet: "${tweet.text}" | Scheduled for: ${tweet.scheduledAt.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}`);
 
         if (tweet.scheduledAt <= now) {
             const posted = await postTweet(tweet.text);
@@ -110,14 +110,14 @@ async function tweetScheduler() {
                 await markTweetAsPublished(tweet.id);
             }
         } else {
-            console.log(`⏳ Not time yet. Skipping "${tweet.text}"`);
+            console.log(`Not time yet. Skipping "${tweet.text}"`);
         }
     }
 
-    console.log("✅ Done processing cycle.\n");
+    console.log("Done processing cycle.\n");
 }
 
-// ✅ Start the scheduler every 1 minute
-console.log("🚀 Tweet scheduler started...");
+//Start the scheduler every 1 minute
+console.log("Tweet scheduler started...");
 tweetScheduler(); // Run immediately
 setInterval(tweetScheduler, 60 * 1000); // Then every 60 seconds
