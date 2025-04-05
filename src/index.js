@@ -1,7 +1,9 @@
-require('dotenv').config();
-const { Client } = require('@notionhq/client');
-const { TwitterApi } = require('twitter-api-v2');
-const { DateTime } = require('luxon');
+import { Client } from "@notionhq/client"
+import { TwitterApi } from "twitter-api-v2"
+import { DateTime } from "luxon"
+import dotenv from "dotenv"
+dotenv.config();
+
 // Initialize Notion & Twitter clients
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const twitterClient = new TwitterApi({
