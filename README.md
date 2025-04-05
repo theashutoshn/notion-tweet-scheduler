@@ -52,23 +52,23 @@ How to Create a database: https://www.youtube.com/watch?v=O8qdvSxDYNY
 
 Your database should look like this:
 
-![alt text](image.png)
+![alt text](/assets/image.png)
 
 For fields check the bleow image:
 
-![alt text](image-2.png)
+![alt text](/assets/image-2.png)
 
 For API keys, Visit https://www.notion.so/profile/integrations to create your API keys.
 
 Once done, make sure to connect the database to your integration.
 
-![alt text](notion-tweet-schedular-integration.gif)
+![alt text](/assets/notion-tweet-schedular-integration.gif)
 
 
 
 Note: Every time you select date, make sure to use "Include Time" to set the time.
 
-![alt text](image-1.png)
+![alt text](/assets/image-1.png)
 
 ##  Deploy to Render
 To Automate, use web services like Render, Railway, etc.
