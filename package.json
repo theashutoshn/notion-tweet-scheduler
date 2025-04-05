@@ -1,5 +1,5 @@
 {
-  "name": "twitter-scheduler",
+  "name": "notion-twitter-scheduler",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -20,10 +20,10 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/theashutoshn/twitter-scheduler.git"
+    "url": "git+https://github.com/theashutoshn/notion-twitter-scheduler.git"
   },
   "bugs": {
-    "url": "https://github.com/theashutoshn/twitter-scheduler/issues"
+    "url": "https://github.com/theashutoshn/notion-twitter-scheduler"
   },
-  "homepage": "https://github.com/theashutoshn/twitter-scheduler#readme"
+  "homepage": "https://github.com/theashutoshn/notion-twitter-scheduler#readme"
 }

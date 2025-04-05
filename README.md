@@ -1,2 +1,2 @@
-# twitter-scheduler
+# notion-twitter-scheduler
  
