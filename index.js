@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Client } = require('@notionhq/client');
 const { TwitterApi } = require('twitter-api-v2');
-const { DatTime } = require('luxon');
+const { DateTime } = require('luxon');
 // ✅ Initialize Notion & Twitter clients
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const twitterClient = new TwitterApi({
@@ -45,7 +45,7 @@ async function getScheduledTweets() {
 
             if (!tweetText || !scheduledAtStr) return null;
 
-            const scheduledAt = DatTime.fromISO(scheduledAtStr, { zone: 'utc' }).setZone('Asia/Kolkata').toJSDate();
+            const scheduledAt = DateTime.fromISO(scheduledAtStr, { zone: 'utc' }).setZone('Asia/Kolkata').toJSDate();
 
             return {
                 id: page.id,
@@ -90,7 +90,7 @@ async function markTweetAsPublished(pageId) {
 
 // ✅ Get current IST time
 function getCurrentTimeIST() {
-    return DatTime.now().setZone('Asia/Kolkata').toJSDate();
+    return DateTime.now().setZone('Asia/Kolkata').toJSDate();
 }
 
 // ✅ Tweet scheduler
