@@ -63,9 +63,9 @@ Once done, make sure to connect the database to your integration.
 ```bash
 Property	|    Type	   |    Required
 ------------+--------------+------------
-Tweet	            |   Rich text  |    Yes
+Tweet	           |   Rich text  |    Yes
 Scheduled	|   Date	   |    Yes (with time)
-isPublished	|   Checkbox        |    
+isPublished	|   Checkbox       |    
 ```
 
 Note: Every time you select date, make sure to use "Include Time" to set the time.
