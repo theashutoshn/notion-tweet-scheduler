@@ -54,19 +54,17 @@ Your database should look like this:
 
 ![alt text](image.png)
 
+For fields check the bleow image:
+
+![alt text](image-2.png)
+
 For API keys, Visit https://www.notion.so/profile/integrations to create your API keys.
 
 Once done, make sure to connect the database to your integration.
 
 ![alt text](notion-tweet-schedular-integration.gif)
 
-```bash
-Property	|    Type	   |    Required
-------------+--------------+------------
-Tweet	           |   Rich text  |    Yes
-Scheduled	|   Date	   |    Yes (with time)
-isPublished	|   Checkbox       |    
-```
+
 
 Note: Every time you select date, make sure to use "Include Time" to set the time.
 
